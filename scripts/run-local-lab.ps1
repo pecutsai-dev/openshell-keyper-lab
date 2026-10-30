@@ -32,7 +32,7 @@ foreach ($directory in @($projectRoot, $reportRoot, $tempRoot, $dataRoot)) {
     New-Item -ItemType Directory -Path $directory -Force | Out-Null
 }
 # Copy only project source and documentation, never credentials, .git or a venv.
-foreach ($name in @('pyproject.toml', 'uv.lock', 'README.md', '.gitignore')) {
+foreach ($name in @('pyproject.toml', 'uv.lock', 'README.md', 'README.zh-TW.md', '.gitignore')) {
     Copy-Item -LiteralPath (Join-Path $repoRoot $name) -Destination $projectRoot
 }
 foreach ($name in @('src', 'tests', 'docs', 'examples')) {

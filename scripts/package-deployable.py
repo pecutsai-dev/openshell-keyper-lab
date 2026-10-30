@@ -13,7 +13,7 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     archive = output / f"openshell-keyper-lab-deployable-{stamp}.zip"
-    files = [root / name for name in ("README.md", "pyproject.toml", "uv.lock", ".gitignore")]
+    files = [root / name for name in ("README.md", "README.zh-TW.md", "pyproject.toml", "uv.lock", ".gitignore")]
     for directory in ("src", "tests", "docs", "examples", "scripts"):
         for source in (root / directory).rglob("*"):
             if (source.is_file() and not source.is_symlink()
