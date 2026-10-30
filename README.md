@@ -367,7 +367,7 @@ uv sync --locked --extra openshell
 # 修改檔案後，執行相關測試與完整協定測試。
 uv run --locked --extra openshell pytest -q
 git diff --check
-git add README.md src tests examples docs
+git add README.md src tests examples docs scripts pyproject.toml uv.lock
 git commit -m "feat: describe your change"
 git push -u origin feature/my-change
 ```
