@@ -1,5 +1,8 @@
 # 本機模擬核准流程
 
+若希望使用專案副本及獨立套件、快取與暫存目錄，請先看
+[獨立資料夾執行方式](local-lab.zh-TW.md)。
+
 第一版已實作 MCP、SQLite 核准服務與獨立核准 CLI。使用模擬身分，尚未連接
 Keyper 或 OpenShell，也不會真的開放 sandbox 網路。
 

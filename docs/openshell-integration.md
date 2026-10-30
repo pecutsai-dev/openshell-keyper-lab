@@ -1,5 +1,16 @@
 # OpenShell integration: verified boundary and next steps
 
+Update: the optional [OpenShell bridge](openshell-bridge.zh-TW.md) now implements
+the gRPC client/interceptor and separate agent/Keyper operator MCP interfaces.
+The milestones below describe the original mock and remaining live deployment
+questions. The subsequent [real v0.1.6 validation](live-validation.zh-TW.md)
+now verifies gateway acknowledgement, runtime policy activation and network access.
+
+2026-10-29: a pinned upstream source probe and local environment check are now
+available. See the [verification record and Keyper requirements](integration-verification.zh-TW.md).
+Run `uv run --locked python -m approval_lab.openshell_probe` to reproduce the
+source-shape checks. Live gateway integration remains unverified.
+
 ## Milestone 1: implemented locally
 
 The reference operation is one additive `network.allow` rule, bound to a

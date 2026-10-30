@@ -104,7 +104,7 @@ class ApprovalStore:
         with self._transaction() as db:
             self._event(db, request_id, "decision_rejected", "unverified-or-unauthorized", now, reason)
 
-    def consume(self, request_id, change: NetworkChange, clock) -> str:
+    def consume(self, request_id, change: NetworkChange, clock, *, actor="mock-policy-adapter") -> str:
         with self._transaction() as db:
             now = clock()
             row = db.execute("SELECT * FROM approvals WHERE request_id=?", (request_id,)).fetchone()
@@ -125,7 +125,7 @@ class ApprovalStore:
                     (now, request_id, now),
                 ).rowcount
                 result = "consumed" if changed == 1 else "already_consumed"
-            self._event(db, request_id, "consume", "mock-policy-adapter", now, result)
+            self._event(db, request_id, "consume", actor, now, result)
             return result
 
     def events(self, request_id):

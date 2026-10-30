@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "private-keyper-operator": {
+      "command": "/absolute/path/to/venv/bin/python",
+      "args": [
+        "-m", "approval_lab.openshell_mcp", "operator",
+        "--config", "/absolute/private/config.json",
+        "--db", "/absolute/private/bridge.sqlite3",
+        "--keyper-verifier", "your_keyper_package.adapter:create_verifier"
+      ]
+    }
+  }
+}

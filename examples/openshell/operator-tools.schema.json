@@ -1,0 +1,61 @@
+[
+  {
+    "name": "get_policy_review",
+    "description": "Review the full operation and obtain the exact Keyper decision challenge.",
+    "inputSchema": {
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "approve": {
+          "title": "Approve",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "request_id",
+        "approve"
+      ],
+      "title": "get_policy_reviewArguments",
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "get_policy_reviewDictOutput",
+      "type": "object"
+    }
+  },
+  {
+    "name": "decide_policy_update",
+    "description": "Private operator path: verify an assertion bound to this decision using the configured Keyper adapter. Never connect this endpoint to the requesting agent.",
+    "inputSchema": {
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "approve": {
+          "title": "Approve",
+          "type": "boolean"
+        },
+        "assertion": {
+          "title": "Assertion",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_id",
+        "approve",
+        "assertion"
+      ],
+      "title": "decide_policy_updateArguments",
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "decide_policy_updateDictOutput",
+      "type": "object"
+    }
+  }
+]

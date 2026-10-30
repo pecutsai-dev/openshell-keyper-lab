@@ -1,0 +1,85 @@
+{
+  "gateway_version": "openshell-gateway 0.1.6",
+  "platform": "linux",
+  "real_gateway": true,
+  "real_keyper": false,
+  "checks": {
+    "gateway_started_with_real_interceptor": true,
+    "real_sandbox_ready": {
+      "name": "mcp-b75c85e30a",
+      "status": {
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": "DependenciesReady",
+            "message": "Supervisor session connected"
+          },
+          {
+            "type": "ConfigurationReady",
+            "status": "True",
+            "reason": "ConfigurationAccepted"
+          }
+        ],
+        "phase": "SANDBOX_PHASE_READY",
+        "currentPolicyVersion": 1,
+        "mainProcessInstanceId": "f9f116b0-34a7-4c46-96c4-ee476a73a787",
+        "configurationAdmission": {
+          "instanceId": "64fcfad3-806f-474a-ad1c-d376a6b519f8",
+          "state": "CONFIGURATION_ADMISSION_STATE_ACCEPTED",
+          "policyVersion": 1,
+          "policyHash": "6552208b1c248a1aa8dac8ab7d76836fca15b570ee6648890193772c26a81ec3",
+          "configRevision": "1409813319797648514",
+          "providerEnvRevision": "3176606324465211593"
+        },
+        "configurationActivated": true,
+        "provisioning": {
+          "attemptId": "caf8a2aa-9760-4ecc-89a7-81299ce11e5d",
+          "configurationChangeId": "f0dfb03e2aa39d1210020ce6df0a2e983862a8f0170794510aaa4c61a73367b2",
+          "configurationChangeTime": "2026-10-29T21:49:26.566Z",
+          "preparationDeadline": "2026-10-29T22:19:26.566Z",
+          "admissionStartTime": "2026-10-29T21:49:34.979Z",
+          "driverOperationId": "4ecb6b10-e53f-4b4e-822d-3c3a4c8d9bb7"
+        },
+        "mainProcessStartedTime": "2026-10-29T21:49:36.555Z"
+      }
+    },
+    "unapproved_direct_rpc_denied": "PERMISSION_DENIED",
+    "runtime_ca_bundle_path": "/run/openshell-supervisor-ca/material/ca-bundle.crt",
+    "network_before_approval": {
+      "exit_code": 7,
+      "stdout": "",
+      "stderr": "curl: (7) Failed to connect to example.com port 443 after 130 ms: Couldn't connect to server\n"
+    },
+    "review_resource_version_after_observations": 13,
+    "mcp_to_real_gateway_submission": {
+      "submitted": true,
+      "gateway_response": {
+        "version": 2,
+        "policyHash": "3afaf1f6d28a07d654dc4edef578ad5123c7332849276bfcf28d1a2f82ca10a2",
+        "annotations": {
+          "approval-lab.example/request-id": "a45a7efd-1e37-4d74-89b8-68305a19ddb1",
+          "internal.openshell.ai/runtime-generation": "bcba5900-77a9-4f53-b604-5115510224e5",
+          "internal.openshell.ai/isolation-backend": "openshell-sandbox",
+          "internal.openshell.ai/auth-epoch": "1",
+          "internal.openshell.ai/gateway-token-id": "dc790837-a99d-47ba-ab10-cebd65676364"
+        }
+      },
+      "runtime_policy_loaded": false,
+      "request_id": "a45a7efd-1e37-4d74-89b8-68305a19ddb1"
+    },
+    "mcp_replay_rejected": true,
+    "runtime_policy_active_version": 2,
+    "network_after_approval": {
+      "exit_code": 0,
+      "stdout": "<!doctype html><html lang=en><head><meta charset=utf-8><link rel=icon href=data:,><meta name=viewport content=\"width=device-width,initial-scale=1\"><title>Example Domain</title><style>html{color-scheme:light dark;background:light-dark(#eee,#222)}body{font:16px/1.6 system-ui,sans-serif;max-width:26em;margin:auto;padding:25vh 2em 2em;text-align:center}</style></head><body><p>This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.</p><script src=/s.js></script></body></html>\n",
+      "stderr": ""
+    },
+    "unapproved_destination_denied": {
+      "exit_code": 7,
+      "stdout": "",
+      "stderr": "curl: (7) Failed to connect to www.iana.org port 443 after 28 ms: Couldn't connect to server\n"
+    }
+  },
+  "success": true
+}

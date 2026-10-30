@@ -1,0 +1,10 @@
+{
+  "gateway_id": "replace-with-your-test-gateway-id",
+  "gateway_target": "gateway.example.com:8080",
+  "gateway_ca": "/absolute/path/to/test-gateway-ca.pem",
+  "bearer_env": "OPENSHELL_LAB_GATEWAY_TOKEN",
+  "principal": {
+    "kind": "user",
+    "subject": "replace-with-exact-gateway-principal-summary"
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "name": "request_policy_update",
+    "description": "Request human review of one version-bound OpenShell addRule operation.",
+    "inputSchema": {
+      "properties": {
+        "operation": {
+          "additionalProperties": true,
+          "title": "Operation",
+          "type": "object"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "reason"
+      ],
+      "title": "request_policy_updateArguments",
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "request_policy_updateDictOutput",
+      "type": "object"
+    }
+  },
+  {
+    "name": "get_policy_approval",
+    "description": "Inspect the exact operation and its approval state.",
+    "inputSchema": {
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_id"
+      ],
+      "title": "get_policy_approvalArguments",
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "get_policy_approvalDictOutput",
+      "type": "object"
+    }
+  },
+  {
+    "name": "submit_approved_policy",
+    "description": "Submit the stored approved operation to the configured OpenShell gateway. Accepts only a request ID. Success means gateway acknowledgement, not sandbox policy reload or connectivity.",
+    "inputSchema": {
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_id"
+      ],
+      "title": "submit_approved_policyArguments",
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "title": "submit_approved_policyDictOutput",
+      "type": "object"
+    }
+  }
+]

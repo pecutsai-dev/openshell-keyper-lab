@@ -1,0 +1,18 @@
+{
+  "sandbox": "sandbox-demo",
+  "workspaceScope": { "workspace": "default" },
+  "expectedResourceVersion": "1",
+  "mergeOperations": [
+    {
+      "addRule": {
+        "ruleName": "human-approved-api",
+        "rule": {
+          "endpoints": [
+            { "host": "api.example.com", "port": 443, "protocol": "tcp" }
+          ],
+          "binaries": [ { "path": "/usr/bin/curl" } ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "validated_date": "2026-10-29",
+  "environment": {
+    "linux": "Ubuntu 24.04.4",
+    "kernel": "6.8.0-138-generic",
+    "docker": "29.1.3",
+    "qemu": "11.1.0",
+    "vm_memory_mib": 2048,
+    "vm_vcpus": 2
+  },
+  "windows_tests": {
+    "passed": 73,
+    "python": "3.14.7"
+  },
+  "linux_tests": {
+    "passed": 73,
+    "python": "3.12.3"
+  },
+  "live_report": "openshell-v0.1.6-live.json",
+  "sdk_wheel_sha256": "a0c5b0e9954ffdbdb4d34110d4a9d0d2dc57579a53e4a67372e0f8dd3b75cd81",
+  "runtime_assets": [
+    {
+      "name": "openshell-gateway-x86_64-unknown-linux-gnu.tar.gz",
+      "url": "https://github.com/NVIDIA/OpenShell/releases/download/v0.1.6/openshell-gateway-x86_64-unknown-linux-gnu.tar.gz",
+      "digest": "sha256:811265a55993beb333905a5b560764a40aa9177250171f711dce8ba820f7eff8"
+    },
+    {
+      "name": "openshell-sandbox-x86_64-unknown-linux-musl.tar.gz",
+      "url": "https://github.com/NVIDIA/OpenShell/releases/download/v0.1.6/openshell-sandbox-x86_64-unknown-linux-musl.tar.gz",
+      "digest": "sha256:789c42ea8783f66574bc49d09f32136224a182f5ef1a46b84b71ef2f31de818f"
+    },
+    {
+      "name": "openshell-supervisor-x86_64-unknown-linux-gnu.tar.gz",
+      "url": "https://github.com/NVIDIA/OpenShell/releases/download/v0.1.6/openshell-supervisor-x86_64-unknown-linux-gnu.tar.gz",
+      "digest": "sha256:c33be6fc1e3bebba60bd1dc29a56b274052578d724e5eca46fedd4311a0cd323"
+    }
+  ],
+  "validated_source_sha256": {
+    "src/approval_lab/approval_service.py": "d6c6a7711e73b0fc9526def9bf45c8841002402b03f4506ef58e882321187b6b",
+    "src/approval_lab/approval_store.py": "5065dd19c87493af1c11e09e28c010f964e3d2d366b5e756c2d0ba6e760def47",
+    "src/approval_lab/cli.py": "4350f1b9228f4c99bc33ef0806390eed20dc3ce6c0ebc82541b38fc103cbccf2",
+    "src/approval_lab/demo.py": "a7fc3f96e6a466b2ac42bbc4f2805ef783b23866c38776aab7cf2bae4e9d806b",
+    "src/approval_lab/identity_adapter.py": "af34d1dc8b76c30bc67b242a3ce66d194b6433dfcdefe4d396eb26748ab09ed8",
+    "src/approval_lab/keyper_adapter.py": "604609ae266ac362a636bb990289ae5178538735faa63b82f1be5d5df2ff942b",
+    "src/approval_lab/mcp_server.py": "b9f8e888a27a45dc62a72aaf3785d1650603a36c86254f2ac489f0742c10eb27",
+    "src/approval_lab/mock_identity.py": "195beaa87027516bc1ea858c014ebd5b1d5a44d41e8b0007391a1b11dd24c010",
+    "src/approval_lab/mock_policy_update.py": "ef29d9db14177e29d573629c53d3f320e6e7d2b33f4b095977945c38f39a5424",
+    "src/approval_lab/models.py": "0f9c1e7d0ed67ab17225cfb2511ed2156870bc5dd1ff2bb46f7bca6d19412174",
+    "src/approval_lab/openshell_bridge.py": "b01661ccde0a7c534f7be277e8a4f65b15ade2f0d605551651c5ef9b6b44e771",
+    "src/approval_lab/openshell_mcp.py": "6ba9b03f608f97c02bb5a7dafeb8720fe043012469bae81a8ff9311ffa1ca66d",
+    "src/approval_lab/openshell_policy.py": "8b2538242727f2e8ade23c7e62c3daceec83b0b43e43f8195e6d748d1b6feda3",
+    "src/approval_lab/openshell_probe.py": "48e81fc4e5313f3921d2cc6ff7b88c115148284abb8931d43a6790c483d2a01e",
+    "src/approval_lab/openshell_smoke.py": "abd4e021a78499fba05225e17e2241aa46f9ffc9e2da118019eadf069b7e09da",
+    "src/approval_lab/openshell_wire.py": "039b5b626321d28d34d4b871a6517f396fb268b33222a57390bd7c55932d5113",
+    "src/approval_lab/__init__.py": "0ee01e265c4b562739638b8ba17fb6043c56a14a5da232f69358a95aaa60d9b1",
+    "src/approval_lab/openshell_proto/datamodel.proto": "e50bd875a760f54b80269c65ee47984cae424fb623b7f59551ba62550c23e70b",
+    "src/approval_lab/openshell_proto/extension.proto": "60f28ee9dc846d41152f4db7e82a439c78d024786efaceb464900d1d1ad129ad",
+    "src/approval_lab/openshell_proto/gateway_interceptor.proto": "905df827e50abb54ca1d2745341f38ad769cb3453c8c7301182590525f1da86f",
+    "src/approval_lab/openshell_proto/openshell.proto": "3b034c913297c3ce4421050c01aebe4087d960f8a26d4b56389718aec668980b",
+    "src/approval_lab/openshell_proto/options.proto": "b0e03562c92777978f6f3e0f46260cdb82f1d88d1c1837eab0e53cdd0f195eb7",
+    "src/approval_lab/openshell_proto/sandbox.proto": "5f680442f28ffb420c647105b73c6fdb1b7a4d847f5e6b06fd5f0cb05359be44",
+    "scripts/validate-live-openshell.py": "d1efdb48c5b5c7f5b44bd58cbcc64d539aacb83ecf1520a0a357b0ee569b8ddb",
+    "scripts/prepare-linux-lab.sh": "2fd85233582685d8e9eadd59665dde9eb18a2bcf5ad6f2403125c409e527b9c5",
+    "tests/test_approval_flow.py": "e4e306a68461c59473342edb83a4b32d14411edd6b2bd49cbac6b74e04a34ec0",
+    "tests/test_mcp_server.py": "bc2a8ad31eeeb5ddf3a0b6d10273e76301e4653e088c97acea98b036df7f54cc",
+    "tests/test_openshell_integration.py": "5d92b27cbffccb39e794e4e31bee558c43fd48e1c1f56230070051ff990b3c1f",
+    "tests/test_openshell_probe.py": "459352ee32e6f669efa3bab0613610a45fb695c3c153779c4f1fb13552042c6a",
+    "examples/openshell/agent-tools.schema.json": "be5b4f9ba2225be42e76ce6295c12361f3996075fc23d56ca32c3c723a50f292",
+    "examples/openshell/operator-tools.schema.json": "60ad8e81eb8d211b5556b06d6a92f63a2facb40bd7708cce8768502713c571f1",
+    "scripts/build-live-workload.sh": "b1964310bd7ea623e6fe5b8eb7d170437229913656133ab5b3d0e1e57da47e0b"
+  },
+  "linux_build_script_verified": true
+}
