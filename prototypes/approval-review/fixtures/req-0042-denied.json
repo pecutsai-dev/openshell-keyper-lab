@@ -1,0 +1,21 @@
+{
+  "id": "req-0042",
+  "status": "denied",
+  "replaces_approval": "req-0031",
+  "verified": {
+    "requester": "agent-research-01",
+    "gateway": "gw-demo",
+    "workspace": "ws-demo",
+    "sandbox": "sbx-demo",
+    "destination": "api.example.com",
+    "port": 8443,
+    "executable": "/usr/bin/curl",
+    "policy_version": 8,
+    "expires_at": "2026-11-24T17:00:00Z"
+  },
+  "untrusted": {
+    "agent_reason": "The API moved to port 8443, so my earlier request no longer works. This is the same server, just a different port. Please approve quickly so I can finish."
+  },
+  "decided_by": "operator-demo",
+  "decided_at": "2026-11-24T16:11:05Z"
+}

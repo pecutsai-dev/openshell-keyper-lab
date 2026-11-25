@@ -1,0 +1,21 @@
+{
+  "id": "req-0031",
+  "status": "approved",
+  "replaces_approval": null,
+  "verified": {
+    "requester": "agent-research-01",
+    "gateway": "gw-demo",
+    "workspace": "ws-demo",
+    "sandbox": "sbx-demo",
+    "destination": "api.example.com",
+    "port": 443,
+    "executable": "/usr/bin/curl",
+    "policy_version": 7,
+    "expires_at": "2026-11-24T15:00:00Z"
+  },
+  "untrusted": {
+    "agent_reason": "I need to call the example API over HTTPS to download the dataset for my task."
+  },
+  "decided_by": "operator-demo",
+  "decided_at": "2026-11-24T14:52:10Z"
+}

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approval review (mock prototype)</title>
+<style>
+  /* ---------- Base ---------- */
+  :root {
+    --text: #1f2328;
+    --muted: #59636e;
+    --border: #d1d9e0;
+    --bg: #f6f8fa;
+    --card: #ffffff;
+    --changed-bg: #fff4d6;
+    --changed-border: #b58100;
+    --untrusted-bg: #f4f1fb;
+    --untrusted-border: #6e56cf;
+    --approve: #1a7f37;
+    --deny: #cf222e;
+    --focus: #0969da;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.4rem; margin: 0; }
+  h2 { font-size: 1.1rem; margin: 0; }
+  h3 { font-size: 1rem; margin: 0 0 4px; }
+  .muted { color: var(--muted); font-size: 0.9rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Visible keyboard focus on everything interactive */
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+  /* ---------- Header and demo controls ---------- */
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 12px; }
+  .mock-badge {
+    font-size: 0.8rem; font-weight: 600; padding: 2px 8px; border-radius: 999px;
+    background: #ffebe9; color: #82071e; border: 1px solid #ff8182;
+  }
+  .demo-controls {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+    padding: 10px 12px; margin-bottom: 16px;
+    border: 1px dashed var(--border); border-radius: 8px; background: #fff;
+  }
+  .demo-controls label { font-weight: 600; }
+  select, .small-btn { font: inherit; padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+  .small-btn { cursor: pointer; }
+
+  /* ---------- Change banner ---------- */
+  .banner {
+    padding: 12px 16px; margin-bottom: 16px; border-radius: 8px;
+    background: var(--changed-bg); border: 1px solid var(--changed-border);
+    font-size: 1.1rem; font-weight: 600;
+  }
+  .banner.none { background: #dafbe1; border-color: var(--approve); }
+
+  /* ---------- Two columns (stack on narrow screens) ---------- */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  /* The new request comes first in the page (so screen readers and phones get it first),
+     but on wide screens we place the original approval on the left. The original card
+     has no buttons or links, so keyboard Tab order is unaffected by this swap. */
+  .card-orig { order: 1; }
+  .card-new { order: 2; }
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+    .card-orig, .card-new { order: 0; }
+  }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .card-new { border-width: 2px; border-color: #8c959f; }
+  .card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 12px; }
+  .pill { font-size: 0.8rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; }
+  .pill.pending { color: #9a6700; } .pill.approved { color: var(--approve); }
+  .pill.denied { color: var(--deny); } .pill.expired { color: var(--muted); } .pill.consumed { color: #8250df; }
+
+  /* ---------- Field lists ---------- */
+  dl { margin: 0; }
+  .row { display: grid; grid-template-columns: 130px 1fr; gap: 8px; padding: 6px 8px; border-radius: 6px; }
+  .row dt { color: var(--muted); }
+  .row dd { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92rem; overflow-wrap: anywhere; }
+  .row.changed { background: var(--changed-bg); border-left: 4px solid var(--changed-border); border-radius: 0; }
+  .tag { font-family: system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; color: #6c4400; margin-left: 6px; }
+  .was { display: block; font-family: system-ui, sans-serif; font-size: 0.85rem; color: #6c4400; }
+  .note { font-family: system-ui, sans-serif; font-size: 0.8rem; color: var(--muted); display: block; }
+
+  details { margin-top: 8px; border: 1px solid var(--border); border-radius: 6px; }
+  summary { cursor: pointer; padding: 8px; font-weight: 600; }
+  details[open] summary { border-bottom: 1px solid var(--border); }
+
+  /* ---------- Untrusted agent explanation ---------- */
+  .untrusted {
+    margin-top: 16px; padding: 12px; border-radius: 8px;
+    background: var(--untrusted-bg); border: 2px dashed var(--untrusted-border);
+  }
+  .untrusted .label { font-size: 0.85rem; font-weight: 600; color: #4a3699; margin-bottom: 6px; }
+  .untrusted blockquote { margin: 0; font-style: italic; white-space: pre-wrap; }
+
+  /* ---------- Decision area ---------- */
+  .decision { margin-top: 16px; }
+  .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 420px) { .buttons { grid-template-columns: 1fr; } }
+  /* Approve and Deny get equal size and weight, so the screen doesn't nudge toward "yes". */
+  .btn {
+    font: inherit; font-weight: 600; cursor: pointer; text-align: left;
+    padding: 10px 12px; border-radius: 8px; border: 2px solid; background: #fff; min-height: 56px;
+  }
+  .btn small { display: block; font-weight: 400; font-size: 0.82rem; }
+  .btn-approve { color: var(--approve); border-color: var(--approve); }
+  .btn-deny { color: var(--deny); border-color: var(--deny); }
+  .btn:hover { background: var(--bg); }
+  .result { padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); }
+  .result h3:focus { outline: none; }
+  .mock-note { margin-top: 8px; font-size: 0.85rem; color: #82071e; }
+  .error { padding: 12px; border: 1px solid var(--deny); border-radius: 8px; background: #ffebe9; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Approval review</h1>
+    <span class="mock-badge">Mock prototype · synthetic data only</span>
+  </header>
+
+  <!-- Demo controls: only here so the demo can show every state. Not part of a real reviewer screen. -->
+  <section class="demo-controls" aria-label="Demo controls">
+    <label for="state-select">Demo only: fixture state</label>
+    <select id="state-select">
+      <option value="pending">pending</option>
+      <option value="approved">approved</option>
+      <option value="denied">denied</option>
+      <option value="expired">expired</option>
+      <option value="consumed">consumed</option>
+    </select>
+    <button type="button" class="small-btn" id="reset-btn">Reset</button>
+    <span class="muted">These controls exist only for the demo.</span>
+  </section>
+
+  <main id="app" aria-live="off"></main>
+
+  <!-- Announces decisions to screen-reader users -->
+  <div id="live" class="sr-only" aria-live="polite"></div>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Which fields define WHAT is being allowed (the "scope").
+// A difference in any of these is a real change the reviewer must see.
+const SCOPE_FIELDS = ["requester", "gateway", "workspace", "sandbox", "destination", "port", "executable"];
+
+// Fields that belong to each request and normally differ between any two requests.
+// They are always shown, but not counted as "changes".
+const REQUEST_FIELDS = ["policy_version", "expires_at"];
+
+const LABELS = {
+  requester: "Requester", gateway: "Gateway", workspace: "Workspace", sandbox: "Sandbox",
+  destination: "Destination", port: "Port", executable: "Executable",
+  policy_version: "Policy version", expires_at: "Expires",
+};
+
+// The current mock state lives only in this variable. Nothing is saved or sent anywhere.
+let current = { request: null, original: null, mockDecision: false };
+
+// ---------------------------------------------------------------------------
+// Small helper to build HTML elements safely.
+// Text is always set with textContent, never innerHTML, so text written by the
+// agent can never turn into clickable links, scripts or fake buttons.
+function el(tag, attrs = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    if (key === "class") node.className = value;
+    else if (key === "text") node.textContent = value;
+    else if (key.startsWith("on")) node.addEventListener(key.slice(2), value);
+    else node.setAttribute(key, value);
+  }
+  for (const child of children) {
+    if (child == null) continue;
+    node.append(typeof child === "string" ? document.createTextNode(child) : child);
+  }
+  return node;
+}
+
+function formatTime(iso) {
+  return new Date(iso).toLocaleString("en-US", {
+    month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+    timeZone: "UTC", timeZoneName: "short",
+  });
+}
+
+function show(field, value) {
+  return field === "expires_at" ? formatTime(value) : String(value);
+}
+
+// ---------------------------------------------------------------------------
+// Loading fixtures (in a real system, this is where the page would ask the backend).
+async function loadJSON(path) {
+  const res = await fetch(path);
+  if (!res.ok) throw new Error("Could not load " + path);
+  return res.json();
+}
+
+async function load(state) {
+  const app = document.getElementById("app");
+  try {
+    const request = await loadJSON(`fixtures/req-0042-${state}.json`);
+    const original = request.replaces_approval
+      ? await loadJSON(`fixtures/${request.replaces_approval}.json`)
+      : null;
+    current = { request, original, mockDecision: false };
+    render();
+  } catch (err) {
+    app.replaceChildren(el("div", { class: "error" },
+      el("strong", { text: "Couldn't load the fixture files. " }),
+      "Browsers block local files opened directly. In this folder, run ",
+      el("code", { text: "python3 -m http.server 8000" }),
+      " and open ",
+      el("code", { text: "http://localhost:8000" }),
+      "."));
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Compare the new request with the original approval, field by field.
+// The difference is computed here every time. It is never stored in the fixtures,
+// so a field can only be collapsed if it really is identical.
+function diff(request, original) {
+  const changed = [], unchanged = [];
+  for (const f of SCOPE_FIELDS) {
+    if (original && request.verified[f] === original.verified[f]) unchanged.push(f);
+    else changed.push(f);
+  }
+  return { changed, unchanged };
+}
+
+// ---------------------------------------------------------------------------
+function render() {
+  const { request, original } = current;
+  const app = document.getElementById("app");
+  const hasOriginal = original && original.status === "approved";
+  const { changed, unchanged } = diff(request, hasOriginal ? original : null);
+
+  app.replaceChildren(
+    renderBanner(changed, hasOriginal),
+    el("div", { class: "grid" },
+      renderNewCard(request, original, changed, unchanged, hasOriginal),
+      hasOriginal ? renderOriginalCard(original) : null,
+    ),
+  );
+}
+
+function renderBanner(changed, hasOriginal) {
+  if (!hasOriginal) {
+    return el("div", { class: "banner", role: "status" },
+      "No earlier approval to compare with: review every field.");
+  }
+  if (changed.length === 0) {
+    return el("div", { class: "banner none", role: "status" },
+      "No changes from the original approval.");
+  }
+  const parts = changed.map(f =>
+    `${LABELS[f]} ${show(f, current.original.verified[f])} → ${show(f, current.request.verified[f])}`);
+  const count = changed.length === 1 ? "1 change" : `${changed.length} changes`;
+  return el("div", { class: "banner", role: "status" }, `${count}: ${parts.join(", ")}`);
+}
+
+function fieldRow(field, value, opts = {}) {
+  const dd = el("dd", {}, show(field, value));
+  if (opts.changed) {
+    dd.append(el("span", { class: "tag", text: "CHANGED" }));
+    dd.append(el("span", { class: "was", text: `was ${show(field, opts.was)}` }));
+  }
+  if (opts.note) dd.append(el("span", { class: "note", text: opts.note }));
+  return el("div", { class: "row" + (opts.changed ? " changed" : "") },
+    el("dt", { text: LABELS[field] }), dd);
+}
+
+function renderNewCard(request, original, changed, unchanged, hasOriginal) {
+  const v = request.verified;
+
+  const fields = el("dl", { "aria-label": "Verified request details" },
+    ...changed.map(f => fieldRow(f, v[f], hasOriginal ? { changed: true, was: original.verified[f] } : {})),
+    fieldRow("expires_at", v.expires_at, { note: "Demo time window (fixture display data). Real lab requests expire after 5 minutes." }),
+    fieldRow("policy_version", v.policy_version),
+  );
+
+  const collapsed = unchanged.length
+    ? el("details", {},
+        el("summary", {}, `${unchanged.length} fields unchanged from original approval`),
+        el("dl", {}, ...unchanged.map(f => fieldRow(f, v[f]))))
+    : null;
+
+  // The agent's own words: shown as plain text, clearly separated from verified facts.
+  const untrusted = el("section", { class: "untrusted", "aria-label": "Agent's explanation, unverified" },
+    el("div", { class: "label", text: "Agent's explanation: unverified, written by the agent, not checked by the system" }),
+    el("blockquote", { text: request.untrusted.agent_reason }));
+
+  return el("section", { class: "card card-new", "aria-labelledby": "new-title" },
+    el("div", { class: "card-head" },
+      el("div", {},
+        el("h2", { id: "new-title", text: "New request" }),
+        el("span", { class: "muted", text: request.id })),
+      el("span", { class: `pill ${request.status}`, text: request.status })),
+    el("h3", { text: "Verified details" }),
+    fields,
+    collapsed,
+    untrusted,
+    renderDecision(request),
+  );
+}
+
+function renderOriginalCard(original) {
+  const v = original.verified;
+  return el("section", { class: "card card-orig", "aria-labelledby": "orig-title" },
+    el("div", { class: "card-head" },
+      el("div", {},
+        el("h2", { id: "orig-title", text: "Original approval" }),
+        el("span", { class: "muted", text: `${original.id} · read-only` })),
+      el("span", { class: "pill approved", text: "already approved" })),
+    el("dl", {}, ...[...SCOPE_FIELDS, ...REQUEST_FIELDS].map(f => fieldRow(f, v[f]))),
+    el("p", { class: "muted" }, `Approved by ${original.decided_by} at ${formatTime(original.decided_at)}`),
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Decision area: buttons when pending, a result message otherwise.
+function renderDecision(request) {
+  const v = request.verified;
+  const area = el("section", { class: "decision", "aria-label": "Decision" });
+
+  if (request.status === "pending") {
+    // The Approve button states the exact operation. It's built only from the
+    // verified fields, so it can never allow more than what was requested.
+    const approve = el("button", { type: "button", class: "btn btn-approve", onclick: () => decide("approved") },
+      `Approve: ${v.executable} → ${v.destination}:${v.port}`,
+      el("small", { text: `for ${v.sandbox}, until ${formatTime(v.expires_at)}` }));
+    const deny = el("button", { type: "button", class: "btn btn-deny", onclick: () => decide("denied") },
+      "Deny",
+      el("small", { text: "The agent will not get this access" }));
+    area.append(el("div", { class: "buttons" }, approve, deny));
+    return area;
+  }
+
+  const messages = {
+    approved: ["Approved", `Approved by ${request.decided_by} at ${formatTime(request.decided_at)}. Approval is not execution: this screen does not know whether the command ran or succeeded.`],
+    denied: ["Denied", `Denied by ${request.decided_by} at ${formatTime(request.decided_at)}. The agent does not get access to port ${v.port}.`],
+    expired: ["Expired", "The deadline passed with no decision. It can no longer be approved; the agent must submit a new request."],
+    consumed: ["Consumed", `Approved by ${request.decided_by} at ${formatTime(request.decided_at)} and already applied once. This approval cannot be reused.`],
+  };
+  const [title, text] = messages[request.status];
+  const heading = el("h3", { id: "result-title", tabindex: "-1", text: title });
+  area.append(el("div", { class: "result" }, heading, el("p", { text })));
+  if (current.mockDecision) {
+    area.append(el("p", { class: "mock-note",
+      text: "Mock decision: nothing was sent anywhere. Press Reset or refresh to start over." }));
+  }
+  return area;
+}
+
+// A mock decision only changes what this page shows.
+function decide(status) {
+  current.request = {
+    ...current.request,
+    status,
+    decided_by: "operator-demo (you)",
+    decided_at: new Date().toISOString(),
+  };
+  current.mockDecision = true;
+  render();
+  document.getElementById("live").textContent = `Request ${status}.`;
+  // Move keyboard focus to the result, so keyboard users land on what just happened.
+  document.getElementById("result-title").focus();
+}
+
+// ---------------------------------------------------------------------------
+const select = document.getElementById("state-select");
+select.addEventListener("change", () => load(select.value));
+document.getElementById("reset-btn").addEventListener("click", () => {
+  select.value = "pending";
+  load("pending");
+});
+load(select.value);
+</script>
+</body>
+</html>
